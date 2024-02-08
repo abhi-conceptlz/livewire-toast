@@ -29,6 +29,15 @@ class LivewireToast extends Component
 
     public function mount()
     {
+        $this->_setType();
+        $this->_setDuration();
+        $this->_setBackgroundColor();
+        $this->_setTextColor();
+        $this->_setPosition();
+        $this->_setIcon();
+        $this->_setClickHandler();
+        $this->_setTransition();
+
         if ($message = session('livewire-toast')) {
             $this->show($message);
         }
@@ -36,53 +45,61 @@ class LivewireToast extends Component
 
     public function show($params)
     {
+        $this->_setDuration();
         $type = '';
         if (is_array($params)) {
+            info('toast', $params);
             $this->message = $params['message'] ?? '';
             $type = $params['type'] ?? '';
+            $this->duration = $params['duration'] ?? $this->duration;
         } else {
             $this->message = $params;
         }
         $this->_setType($type);
-    }
 
-    public function showWarning($message)
-    {
-        $this->message = $message;
-        $this->_setType('warning');
-    }
-
-    public function showInfo($message)
-    {
-        $this->message = $message;
-        $this->_setType('info');
-    }
-
-    public function showError($message)
-    {
-        $this->message = $message;
-        $this->_setType('error');
-    }
-
-    public function showSuccess($message)
-    {
-        $this->message = $message;
-        $this->_setType('success');
-    }
-
-    public function render()
-    {
         $this->_setBackgroundColor();
         $this->_setTextColor();
-        $this->_setPosition();
-        $this->_setDuration();
         $this->_setIcon();
-        $this->_setClickHandler();
-        $this->_setTransition();
 
         if (!empty($this->message)) {
             $this->dispatch('new-toast');
         }
+    }
+
+    public function showWarning(string $message, int $duration = null)
+    {
+        $this->show([
+            'type' => 'warning',
+            ...get_defined_vars(),
+        ]);
+    }
+
+    public function showInfo(string $message, int $duration = null)
+    {
+        $this->show([
+            'type' => 'info',
+            ...get_defined_vars(),
+        ]);
+    }
+
+    public function showError(string $message, int $duration = null)
+    {
+        $this->show([
+            'type' => 'error',
+            ...get_defined_vars(),
+        ]);
+    }
+
+    public function showSuccess(string $message, int $duration = null)
+    {
+        $this->show([
+            'type' => 'success',
+            ...get_defined_vars(),
+        ]);
+    }
+
+    public function render()
+    {
         return view('livewire-toast::livewire.livewire-toast');
     }
 
