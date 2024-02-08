@@ -29,7 +29,7 @@ class LivewireToast extends Component
 
     public function mount()
     {
-        if($message = session('livewire-toast')) {
+        if ($message = session('livewire-toast')) {
             $this->show($message);
         }
     }
@@ -79,9 +79,9 @@ class LivewireToast extends Component
         $this->_setIcon();
         $this->_setClickHandler();
         $this->_setTransition();
-        
+
         if (!empty($this->message)) {
-            $this->dispatchBrowserEvent('new-toast');
+            $this->dispatch('new-toast');
         }
         return view('livewire-toast::livewire.livewire-toast');
     }
@@ -130,25 +130,25 @@ class LivewireToast extends Component
 
     private function _setIcon()
     {
-        $this->showIcon = (boolean)config('livewire-toast.show_icon');
+        $this->showIcon = (bool)config('livewire-toast.show_icon');
     }
 
     private function _setClickHandler()
     {
-        $this->hideOnClick = (boolean)config('livewire-toast.hide_on_click');
+        $this->hideOnClick = (bool)config('livewire-toast.hide_on_click');
     }
 
     private function _setTransition()
     {
-        $this->transition = (boolean)config('livewire-toast.transition');
+        $this->transition = (bool)config('livewire-toast.transition');
         if ($this->transition) {
             $this->transitioClasses['leave_end_class'] =
-            $this->transitioClasses['enter_start_class'] =
-            reset($this->transitions[config('livewire-toast.transition_type')]);
+                $this->transitioClasses['enter_start_class'] =
+                reset($this->transitions[config('livewire-toast.transition_type')]);
 
             $this->transitioClasses['leave_start_class'] =
-            $this->transitioClasses['enter_end_class'] =
-            end($this->transitions[config('livewire-toast.transition_type')]);
+                $this->transitioClasses['enter_end_class'] =
+                end($this->transitions[config('livewire-toast.transition_type')]);
         }
     }
 }
